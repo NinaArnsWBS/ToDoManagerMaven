@@ -37,6 +37,7 @@ public class ConsoleUI
 			2) Aufgaben anzeigen
 			3) Aufgabe erledigt markieren
 			4) Aufgabe löschen
+			5) Blinken und Leuchten
 			0) Ende
 			Auswahl:\s""");
 			String choice = scanner.nextLine().trim();
@@ -47,6 +48,7 @@ public class ConsoleUI
 				case "2" -> listToDos();
 				case "3" -> completeToDo();
 				case "4" -> deleteToDo();
+				case "5" ->	System.out.println("Blinken und Leuchten");
 				case "0" ->
 				{
 					System.out.println("Tschüss!");
