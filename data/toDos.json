@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "description": "Erste",
+    "dueDate": "2026-03-04",
+    "completed": true
+  },
+  {
+    "id": 2,
+    "description": "Test4",
+    "completed": false
+  },
+  {
+    "id": 3,
+    "description": "Test5",
+    "dueDate": "2026-03-06",
+    "completed": false
+  },
+  {
+    "id": 4,
+    "description": "Test7",
+    "dueDate": "2026-04-04",
+    "completed": false
+  },
+  {
+    "id": 5,
+    "description": "Leer",
+    "completed": false
+  },
+  {
+    "id": 6,
+    "description": "Test Heute",
+    "dueDate": "2026-03-04",
+    "completed": false
+  },
+  {
+    "id": 7,
+    "description": "Letzte Woche",
+    "dueDate": "2026-03-01",
+    "completed": true
+  }
+]
