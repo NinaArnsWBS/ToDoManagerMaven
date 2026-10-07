@@ -1,8 +1,10 @@
 package ui;
 
+import model.ToDo;
 import service.ToDoService;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 // Darstellung / Presentation Layer
@@ -40,7 +42,7 @@ public class ConsoleUI
 			);
 			String choice = scanner.nextLine().trim();
 
-			switch (choice)
+			switch (choice) // Switch-Expression
 			{
 				case "1" -> addToDo();
 				case "2" -> listToDos();
@@ -66,7 +68,7 @@ public class ConsoleUI
 		try
 		{
 			service.addToDo(description, dueDate);
-			System.out.println("Angelegt.");
+			System.out.println("Angelegt.\n");
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -82,16 +84,76 @@ public class ConsoleUI
 
 	private void listToDos()
 	{
+		try
+		{
+			List<ToDo> toDos = service.listToDos();
 
+			if (toDos.isEmpty())
+			{
+				System.out.println("Keine Aufgaben vorhanden.\n");
+				return;
+			}
+
+			// Formatierte Ausgabe als Tabelle
+			System.out.println("ID | Erledigt | Fällig bis | Beschreibung ");
+			for (ToDo t : toDos)
+			{
+				System.out.printf("%2d | %4s%4s | %-10s | %-12s%n",
+								  t.getId(), t.isCompleted() ? "X" : " ", "",
+								  t.getDueDate() == null ? "-" : t.getDueDate(),
+								  t.getDescription());
+			}
+			System.out.println();
+		}
+		catch (IOException e)
+		{
+			System.out.println("Fehler beim Laden.");
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private void completeToDo()
 	{
-
+		try
+		{
+			System.out.print("ID: ");
+			int id = Integer.parseInt(scanner.nextLine());
+			service.completeToDo(id);
+			System.out.println("Erledigt markiert.\n");
+		}
+		catch (IOException e)
+		{
+			System.out.println("Fehler beim Laden oder Speichern.");
+			System.out.println(e.getMessage());
+		}
+		catch (NumberFormatException e)
+		{
+			System.out.println("Eingabe war keine ganze Zahl.");
+		}
+		catch (IllegalArgumentException e)
+		{
+			System.out.println("Fehler.");
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private void deleteToDo()
 	{
-
+		try
+		{
+			System.out.print("ID: ");
+			int id = Integer.parseInt(scanner.nextLine());
+			service.deleteToDo(id);
+			System.out.println("Gelöscht.\n");
+		}
+		catch (IOException e)
+		{
+			System.out.println("Fehler beim Laden oder Speichern.");
+			System.out.println(e.getMessage());
+		}
+		catch (NumberFormatException e)
+		{
+			System.out.println("Eingabe war keine ganze Zahl.");
+		}
 	}
 }

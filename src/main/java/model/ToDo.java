@@ -42,4 +42,14 @@ public class ToDo
 	{
 		this.completed = completed;
 	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public String getDueDate()
+	{
+		return dueDate;
+	}
 }
