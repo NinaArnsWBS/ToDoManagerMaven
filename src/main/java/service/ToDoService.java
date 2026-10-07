@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class ToDoService
 
 	public List<ToDo> listToDos() throws IOException
 	{
-		List<ToDo> list = repo.findAll();
+		List<ToDo> list = new ArrayList<>(repo.findAll());
 
 		// Sortiert die Liste der To-Do-Objekte.
 		// Zuerst wird nach Completed sortiert. Die abgeschlossenen To-dos stehen als Letztes in der Liste.
