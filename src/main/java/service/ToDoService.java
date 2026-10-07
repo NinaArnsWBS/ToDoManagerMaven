@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 // Geschäftslogik / Business Logic Layer
@@ -31,7 +31,7 @@ public class ToDoService
 	 * @param description Die Beschreibung darf nicht leer sein.
 	 * @param dueDate Das Fälligkeitsdatum darf leer sein, muss sonst aber dem Format yyyy-mm-dd entsprechen.
 	 * @throws IOException Bei Fehlern mit dem Dateizugriff.
-	 * @throws IllegalArgumentException Wenn die Beschreibung leer ist oder das Datum im falschen Format ist.
+	 * @throws IllegalArgumentException Wenn die Beschreibung leer ist, oder das Datum im falschen Format ist.
 	 */
 	public void addToDo(String description, String dueDate) throws IOException, IllegalArgumentException
 	{
@@ -63,9 +63,26 @@ public class ToDoService
 
 	public List<ToDo> listToDos() throws IOException
 	{
-		// Änderung
-		List<ToDo> soNeListe = new ArrayList<>(repo.findAll());
-		return soNeListe;
+		List<ToDo> list = repo.findAll();
+
+		// Sortiert die Liste der To-Do-Objekte.
+		// Zuerst wird nach Completed sortiert. Die abgeschlossenen To-dos stehen als Letztes in der Liste.
+		// Danach wird nach Datum sortiert. Da ein leeres Datum als Null gespeichert wird, müssen wir hier unbedingt auf Null-Werte prüfen. To-dos ohne Fälligkeitsdatum sollen am Ende stehen.
+		// Als Letztes wird noch nach ID sortiert.
+		list.sort(Comparator.comparing(ToDo::isCompleted)
+				  .thenComparing((o1, o2) -> {
+					  if (o1.getDueDate() != null && o2.getDueDate() != null)
+						  return o1.getDueDate().compareTo(o2.getDueDate());
+					  else if (o1.getDueDate() == null && o2.getDueDate() != null)
+						  return 1;
+					  else if (o1.getDueDate() != null && o2.getDueDate() == null)
+						  return -1;
+					  return 0;
+				  })
+				  .thenComparing(ToDo::getId));
+
+		return list;
+
 	}
 
 	public void completeToDo(int id) throws IOException, IllegalArgumentException
@@ -88,10 +105,10 @@ public class ToDoService
 	}
 
 	/**
-	 * Ermittelt die nächste freie ID für To-Do's.
+	 * Ermittelt die nächste freie ID für To-dos.
 	 * Dabei werden alle To-Do-Objekte geladen, der größte ID-Wert ermittelt und dann um 1 erhöht.
 	 * @return Die nächste freie ID.
-	 * @throws IOException Wenn beim Laden der To-Do's ein Fehler auftritt.
+	 * @throws IOException Wenn beim Laden der To-dos ein Fehler auftritt.
 	 */
 	private int nextId() throws IOException
 	{
