@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 // Geschäftslogik / Business Logic Layer
@@ -62,7 +63,9 @@ public class ToDoService
 
 	public List<ToDo> listToDos() throws IOException
 	{
-		return repo.findAll();
+		// Änderung
+		List<ToDo> soNeListe = new ArrayList<>(repo.findAll());
+		return soNeListe;
 	}
 
 	public void completeToDo(int id) throws IOException, IllegalArgumentException
